@@ -39,14 +39,14 @@ const SideBar = ({ isOpen, toggleSidebar }) => {
       </button>
 
       {/* Logo / Title */}
-      <h1 className={`text-xl font-bold text-accent mb-6 transition-opacity ${!isOpen && "opacity-0 hidden"}`}>
+      {/* <h1 className={`text-xl font-bold text-accent mb-6 transition-opacity ${!isOpen && "opacity-0 hidden"}`}>
         testmyskills
-      </h1>
+      </h1>  */}
 
       {/* Navigation Links */}
       <nav className="flex flex-col gap-2">
-        <SidebarItem icon={<FaHome />} label="Dashboard" isOpen={isOpen} path="/" />
-        <SidebarItem icon={<FaListAlt />} label="Practice Tests" isOpen={isOpen} path="/practice-tests" />
+        <SidebarItem icon={<FaHome />} label="Dashboard" isOpen={isOpen} path="/dashboard" />
+        <SidebarItem icon={<FaListAlt />} label="Take Exam" isOpen={isOpen} path="/practice-tests" />
         <SidebarItem icon={<FaClipboard />} label="Mock Exams" isOpen={isOpen} path="/mock-exams" />
         <SidebarItem icon={<FaGift />} label="Refer & Rule" isOpen={isOpen} path="/refer-and-rule" />
       </nav>

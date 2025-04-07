@@ -7,21 +7,21 @@ const Dashboard = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-center">
         <Card
-          title="Your Predicted KCET Score"
-          description="AI-powered score prediction based on your mock exams."
-          buttonText="Upgrade to Unlock"
+          title="AI Interview Simulator"
+          description="Practice mock interviews powered by AI to boost your confidence."
+          buttonText="Take Your Interview"
           bgColor="bg-cardBg"
         />
         <Card
-          title="Mock Exam"
-          description="Full-length KCET mock to test real exam readiness."
-          buttonText="Take Mock Exam"
+          title="Coding Problems"
+          description="Sharpen your skills with curated DSA questions."
+          buttonText="Practice Coding"
           bgColor="bg-purple-900"
         />
         <Card
-          title="Practice Test"
-          description="Quick, chapter-wise tests to sharpen concepts."
-          buttonText="Start Practicing"
+          title="Mock Tests"
+          description="Timed, real-world coding assessments to test your readiness."
+          buttonText="Start Mock Test"
           bgColor="bg-purple-800"
         />
       </div>
@@ -30,4 +30,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
+  

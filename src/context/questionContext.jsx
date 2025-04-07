@@ -8,6 +8,9 @@ export const QuestionsProvider = ({ children }) => {
   const [currentCode, setCurrentCode] = useState(selectedQuestion ? selectedQuestion.code : ""); // Store current code
   const [results, setResults] = useState({});
   const [score, setScore] = useState({});
+  const [id,setId] = useState(3);
+  const [riskScore,setRiskScore] = useState(0);
+  const [voice,setVoice] = useState("");
   
   const updateResults = (index1, userOutpu1, expectedOutput1) => {
     if(index1==-1) {
@@ -37,6 +40,19 @@ export const QuestionsProvider = ({ children }) => {
     console.log(score);
   };
 
+  const setRiskScoreData = (data) => {
+    console.log("Risk Score:"+data);;
+    let t=riskScore+data;
+    setRiskScore(t);
+    console.log("Risk Score:"+t);
+  }
+
+  const setVoiceData = (data) => {
+    let t=voice+data;
+    setVoice(t);
+    console.log("Voice:"+t);
+  }
+
   return (
     <QuestionsContext.Provider
       value={{
@@ -49,7 +65,8 @@ export const QuestionsProvider = ({ children }) => {
         setCurrentCode, // Expose function to update code
         questionsData,
         handleSelectQuestion, 
-        appendScore
+        appendScore,
+        id
       }}
     >
       {children}
