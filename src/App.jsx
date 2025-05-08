@@ -83,6 +83,7 @@ import FrontPage from "./Parts/FrontPage";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import WebcamCapture from "./backend/WebCamCapture";
+import SidebarSelectQuestion from "./separatequestion/Questiondisplay";
 function App() {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const location = useLocation(); // Get current path
@@ -116,6 +117,8 @@ function App() {
     <Route path="/refer-and-rule" element={<ReferAndRule />} />
     <Route path="/how-to-use" element={<HowToUse />} />
     <Route path="/settings" element={<Settings />} />
+    <Route path="/host-test" element={<SidebarSelectQuestion />} />
+    
     {/* <Route path="/webcam" element={<SettingWebcamCaptures />} /> */}
     <Route path="/solve/:questionId" element={<ResizableLayout />} />
 
