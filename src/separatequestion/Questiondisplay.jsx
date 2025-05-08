@@ -3,12 +3,15 @@ import { motion } from "framer-motion";
 import { questionsData } from "../questionsdata"; // Assuming your questionsData is imported from here
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid'; // Import uuid for generating unique IDs
+import { ref, set, getDatabase } from "firebase/database"; // Firebase Realtime Database methods
+import { useAuth } from '../AuthContext'; // Import AuthContext to get current user
 
 const SidebarSelectQuestion = () => {
   const [panelWidth, setPanelWidth] = useState(300); // Sidebar width
   const [selectedQuestions, setSelectedQuestions] = useState([]); // State to store selected questions
-  const selected=false
+  const selected = false;
   const navigate = useNavigate();
+  const { currentUser } = useAuth(); // Get current user from AuthContext
 
   const handleSolveClick1 = (questionId) => {
     handleSelectQuestion(questionId);
@@ -22,7 +25,6 @@ const SidebarSelectQuestion = () => {
 
   const handleSelectQuestion = (question) => {
     if (!selectedQuestions.some((q) => q.id === question.id)) {
-       
       setSelectedQuestions((prev) => [...prev, question]); // Add question if not already selected
     }
   };
@@ -34,15 +36,45 @@ const SidebarSelectQuestion = () => {
   };
 
   const handleConfirmSelection = () => {
-    // Add unique ID to each selected question
-    const updatedQuestions = selectedQuestions.map((question) => ({
-      ...question,
-      uniqueId: uuidv4(), // Add unique ID to each question
-    }));
-    setSelectedQuestions(updatedQuestions);
-    console.log("Confirmed Questions with Unique IDs:", updatedQuestions);
-    alert("Questions confirmed!",updatedQuestions); // Show confirmation message
-    // Optionally, navigate or handle the confirmation action
+    if (currentUser) {
+      // Add unique ID to each selected question
+      const updatedQuestions = selectedQuestions.map((question) => ({
+        ...question,
+        uniqueId: uuidv4(), // Add unique ID to each question
+      }));
+      setSelectedQuestions(updatedQuestions);
+
+      // Get a reference to the Realtime Database and store the questions
+      const db = getDatabase();
+      const selectedQuestionsRef = ref(db, `users/${currentUser.uid}/selectedQuestions`);
+
+      // Create a unique reference for each selected question
+      updatedQuestions.forEach((question) => {
+        const questionRef = ref(db, `users/${currentUser.uid}/selectedQuestions/${question.uniqueId}`);
+        
+        // Save each selected question to the Realtime Database
+        set(questionRef, {
+          id: question.id,
+          title: question.title,
+          difficulty: question.difficulty,
+          complexity: question.complexity,
+          // Include any other data you want to store
+        })
+          .then(() => {
+            console.log("Question saved to Realtime Database:", question);
+          })
+          .catch((error) => {
+            console.error("Error saving question:", error);
+            alert("Error saving questions!");
+          });
+      });
+
+      // Alert and Confirmation
+      console.log("Confirmed Questions with Unique IDs:", updatedQuestions);
+      alert("Questions confirmed and saved to Realtime Database!");
+    } else {
+      alert("User not authenticated");
+    }
   };
 
   return (
@@ -110,9 +142,6 @@ const SidebarSelectQuestion = () => {
             });
           }}
         ></div>
-
-      
-       
       </motion.div>
 
       {/* Main content area displaying all questions */}
@@ -144,21 +173,22 @@ const SidebarSelectQuestion = () => {
           ))}
         </div>
       </div>
-        {/* Confirm Button at the bottom-right */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: "20px",
-            right: "20px",
-          }}
+
+      {/* Confirm Button at the bottom-right */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: "20px",
+          right: "20px",
+        }}
+      >
+        <button
+          onClick={handleConfirmSelection}
+          className="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600 scale-110 transition"
         >
-         <button
-            onClick={handleConfirmSelection}
-            className="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600 scale-110 transition"
-          >
-            Confirm
-          </button>
-        </div>
+          Confirm
+        </button>
+      </div>
     </div>
   );
 };

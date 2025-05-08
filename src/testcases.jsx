@@ -97,10 +97,11 @@ const TopPanel = () => {
                 <label style={{ color: "white" }}>Language:</label>
                 <select value={selectedLanguage} onChange={handleLanguageChange} style={{ padding: "4px", borderRadius: "4px", background: "#333545", color: "white", border: "none", fontSize: "14px" }}>
                     {Object.keys(LANGUAGE_VERSIONS).map((lang) => (
-                        <option key={lang} value={lang}>
+                  
+                  <option key={lang} value={lang}>
                             {lang.toUpperCase()} ({LANGUAGE_VERSIONS[lang]})
                         </option>
-                    ))}
+                    ))}     
                 </select>
                 <button onClick={handleRun} style={{ padding: "5px 10px", borderRadius: "4px", background: "#5A20CB", color: "white", border: "none", cursor: "pointer" }}>
                     Run

@@ -1,3 +1,4 @@
+import LogoutButton from "../pages/Logout";
 import Card from "./Card";
 
 const Dashboard = () => {
@@ -25,7 +26,9 @@ const Dashboard = () => {
           bgColor="bg-purple-800"
         />
       </div>
+      <LogoutButton/>
     </div>
+    
   );
 };
 

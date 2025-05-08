@@ -1,7 +1,7 @@
 // firebaseConfig.js
 import { initializeApp } from "firebase/app";
 import { getDatabase,ref,onValue } from "firebase/database"; // Import getDatabase
-
+import { getAuth } from "firebase/auth";
 const firebaseConfig = {
   apiKey: "AIzaSyDrbfGcY2nDQuRIr5UEcmF8LbTppDaReoA",
   authDomain: "online-code-conducting-form.firebaseapp.com",
@@ -14,6 +14,6 @@ const firebaseConfig = {
 };
 
  const app = initializeApp(firebaseConfig);
-
+ const auth = getAuth(app);
 const database = getDatabase(app); // Initialize Realtime Database
-export {database,ref,onValue,app};
+export {database,ref,onValue,auth,app};
