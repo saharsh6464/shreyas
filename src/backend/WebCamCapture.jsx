@@ -51,7 +51,7 @@ const WebcamCapture = () => {
       const result = await response.json();
       console.log("Server Response:", result);
     } catch (error) {
-      console.error("Error sending image:", error);
+      console.error("Error send image:", error);
     }
   };
 
