@@ -1,143 +1,56 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Editor from "@monaco-editor/react";
-import { LANGUAGE_VERSIONS } from "../../constants";
-import { runCode } from "../../services/codeRunner.js";
 import { useQuestions } from "../../context/questionContext";
+import TestResultPopup from "./TestResultPopup"; // Import the popup component
 
 const TopPanel = () => {
-  const [testResults, setTestResults] = useState({});
+  const [showPopup, setShowPopup] = useState(false);
+  const [summary, setSummary] = useState({ passed: 0, failed: 0 });
 
-  const [selectedLanguage, setSelectedLanguage] = useState("c");
-  const [code, setCode] = useState("");
-  const [output, setOutput] = useState("");
-  const {updateResults,selectedQuestion, currentCode, setCurrentCode } = useQuestions();
-  const [mergedCode, setMergedCode] = useState("");
+  const {
+    selectedQuestion,
+    testResult,
+    currentCode,
+    setCurrentCodeHandler,
+    generateCppWithTests,
+  } = useQuestions();
 
-  useEffect(() => {
-    if (
-      selectedQuestion &&
-      selectedLanguage &&
-      selectedQuestion.codeTemplate[selectedLanguage]
-    ) {
-      setCode(
-        selectedQuestion.codeTemplate[selectedLanguage].functionSignature
-      );
-      setCurrentCode(
-        selectedQuestion.codeTemplate[selectedLanguage].functionSignature
-      );
-    } else {
-      setCode(`// Start coding in ${selectedLanguage}...`);
-      setCurrentCode(`// Start coding in ${selectedLanguage}...`);
-    }
-  }, [selectedQuestion, selectedLanguage, setCurrentCode]);
+  // const getTestSummaryForSelectedQuestion = () => {
+  //   if (!selectedQuestion || !testResult[String(selectedQuestion.id)]) {
+  //     return { passed: 0, failed: 0 };
+  //   }
 
-  const handleLanguageChange = (e) => {
-    const newLanguage = e.target.value;
-    setSelectedLanguage(newLanguage);
-    if (selectedQuestion && selectedQuestion.codeTemplate[newLanguage]) {
-      setCode(selectedQuestion.codeTemplate[newLanguage].functionSignature);
-      setCurrentCode(
-        selectedQuestion.codeTemplate[newLanguage].functionSignature
-      );
-    } else {
-      setCode(`// Start coding in ${newLanguage}...`);
-      setCurrentCode(`// Start coding in ${newLanguage}...`);
-    }
+  //   const results = testResult[String(selectedQuestion.id)];
+  //   const passed = Object.values(results).filter((val) => val === true).length;
+  //   const failed = Object.values(results).filter((val) => val === false).length;
+
+  //   return { passed, failed };
+  // };
+
+  const handleSubmit = () => {
+    const { passed, failed } = getTestSummaryForSelectedQuestion();
+    setSummary({ passed, failed });
+    setShowPopup(true);
   };
-  function convertStringToTuple(str) {
-    // Remove the outermost brackets and replace with parentheses
-    if (str.startsWith('[') && str.endsWith(']')) {
-      str = '(' + str.slice(1, -1) + ')';
+
+  const getTestSummaryForSelectedQuestion = () => {
+    if (
+      !selectedQuestion ||
+      !testResult ||
+      !testResult[String(selectedQuestion.id)] ||
+      !Array.isArray(testResult[String(selectedQuestion.id)].results)
+    ) {
+      return { passed: 0, failed: 0 };
     }
   
-    // Check for nested array and replace with "myArray"
-    const regex = /^\((.*?)\[(.*?)\](?:,\s*)?(.*)\)$/;
-    const match = str.match(regex);
+    const { results } = testResult[String(selectedQuestion.id)];
   
-    if (match) {
-      const beforeArray = match[1];
-      const arrayPart = match[2];
-      const afterArray = match[3] ? ',' + match[3] : ''; // Add comma if afterArray exists
+    const passed = results.filter((r) => r.passed).length;
+    const failed = results.length - passed;
   
-      return `(${beforeArray}myArray${afterArray})`;
-    }
+    return { passed, failed };
+  };
   
-    return str; // Return the modified string (or original if no match)
-  }
-function processInput(input) {
-  const regex = /\[\[(.*?)\](?:,\s*)?(.*?)\]/;
-  const match = input.match(regex);
-
-  if (match) {
-    const arrayStr = match[1];
-
-    // Convert array string to a properly formatted C-style array
-    return `int myArray[] = {${arrayStr}};`;
-  }
-  return ""; // Return an empty string if the input format is invalid.
-}
-const boolArray2 = [false, false, true, true];
-
-  const handleRun = async () => {
-    setCurrentCode(code); // Save current code globally
-    let merged = code; // Default: User's code remains unchanged
-
-    // **Extract Function Name Safely**
-    let functionName = "myFunction"; // Default if extraction fails
-    const functionRegex = /\b(?:def|function|public static|int|float|void|char)\s+(\w+)\s*\(/;
-    const match = code.match(functionRegex);
-    if (match) {
-        functionName = match[1]; // Extracted function name
-    }
-   let i = 1;
-    for (const a of selectedQuestion.testCases) {
-        let s = convertStringToTuple(a.input);
-        console.log("s:", s);
-
-        let mainCode = selectedQuestion.codeTemplate[selectedLanguage].mainFunction;
-        let mainCodeb = selectedQuestion.codeTemplate[selectedLanguage].mainfunctionb;
-        let mainCode2 = selectedQuestion.codeTemplate[selectedLanguage].mainFunction2 || "";
-
-        if (selectedLanguage === "javascript" || selectedLanguage === "python" || selectedLanguage === "c" || selectedLanguage === "cpp") {
-
-        if(selectedQuestion.Array){
-          let varResult = processInput(a.input);
-          // console.log("varResult:", varResult);
-          // console.log(mainCodeb);
-          merged = `${code}\n\n${mainCode}${varResult}${mainCodeb}${s}${mainCode2}`; // Remove extra `)`
-        }else{
-          console.log(s);
-          merged = `${code}\n\n${mainCode}${s}${mainCode2}`; // Remove extra `)`
-        }
-        // console.log("s"+merged);
-       }
-       else if (selectedLanguage === "java") {
-            merged = `public class Main {
-                public static void main(String[] args) {
-                    System.out.println("Running your code:");
-                    System.out.println(${functionName}(1,2));
-                }
-                ${code}
-            }`;
-        }
-        setMergedCode(merged);
-        // console.log("Merged Code:", merged);
-
-        // **Pass the merged code instead of the original code**
-        const result = await runCode(merged, selectedLanguage, "");
-        setOutput(result);
-        console.log("Output:", result);
-       updateResults(i, result, a.output); // Update results for each test case
-       i++;
-    }
-    // setTestResults(prev => ({
-    //   ...prev,
-    //   [selectedQuestion.id]: { passed: passedCount, total: totalCount }
-    // })); 
-    // console.log("Test Results:", testResults); 
-};
-
-
   return (
     <div
       style={{
@@ -157,27 +70,19 @@ const boolArray2 = [false, false, true, true];
           gap: "10px",
         }}
       >
-        <label style={{ color: "white" }}>Language:</label>
-        <select
-          value={selectedLanguage}
-          onChange={handleLanguageChange}
-          style={{
-            padding: "4px",
-            borderRadius: "4px",
-            background: "#333545",
-            color: "white",
-            border: "none",
-            fontSize: "14px",
-          }}
-        >
-          {Object.keys(LANGUAGE_VERSIONS).map((lang) => (
-            <option key={lang} value={lang}>
-              {lang.toUpperCase()} ({LANGUAGE_VERSIONS[lang]})
-            </option>
-          ))}
-        </select>
+        <label style={{ color: "white" }}>Language: CPP</label>
         <button
-          onClick={handleRun}
+          onClick={() => {
+            // if (
+            //   selectedQuestion.totalarray === 2 &&
+            //   selectedQuestion.totalint === 1
+            // )
+            generateCppWithTests(
+              currentCode,
+              selectedQuestion.tests,
+              selectedQuestion.codeTemplate
+            );
+          }}
           style={{
             padding: "5px 10px",
             borderRadius: "4px",
@@ -190,6 +95,7 @@ const boolArray2 = [false, false, true, true];
           Run
         </button>
         <button
+          onClick={handleSubmit}
           style={{
             padding: "5px 10px",
             borderRadius: "4px",
@@ -202,16 +108,14 @@ const boolArray2 = [false, false, true, true];
           Submit
         </button>
       </div>
+
       <div style={{ flexGrow: 1 }}>
         <Editor
           height="100%"
           width="100%"
-          language={selectedLanguage}
-          value={code}
-          onChange={(newCode) => {
-            setCode(newCode);
-            setCurrentCode(newCode);
-          }}
+          language="cpp"
+          value={currentCode}
+          onChange={(newCode) => setCurrentCodeHandler(newCode)}
           theme="vs-dark"
           options={{
             fontSize: 14,
@@ -220,19 +124,14 @@ const boolArray2 = [false, false, true, true];
           }}
         />
       </div>
-      {/* <div
-        style={{
-          padding: "10px",
-          background: "#1e1e2f",
-          color: "white",
-          minHeight: "50px",
-          overflowY: "auto",
-          paddingBottom: "30px",
-        }}
-      >
-        <strong>Output:</strong>
-        <pre style={{ whiteSpace: "pre-wrap" }}>{output}</pre>
-      </div> */}
+
+      {showPopup && (
+        <TestResultPopup
+          passed={summary.passed}
+          failed={summary.failed}
+          onClose={() => setShowPopup(false)}
+        />
+      )}
     </div>
   );
 };
