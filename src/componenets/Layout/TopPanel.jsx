@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import Editor from "@monaco-editor/react";
 import { useQuestions } from "../../context/questionContext";
-import TestResultPopup from "./TestResultPopup"; // Import the popup component
+import TestResultPopup from "./TestResultPopup";
 
 const TopPanel = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [summary, setSummary] = useState({ passed: 0, failed: 0 });
-
+// console.log("SummarY",summary);
+ const {updateQuestionScore} = useQuestions();
   const {
     selectedQuestion,
     testResult,
@@ -14,43 +15,35 @@ const TopPanel = () => {
     setCurrentCodeHandler,
     generateCppWithTests,
   } = useQuestions();
-
-  // const getTestSummaryForSelectedQuestion = () => {
-  //   if (!selectedQuestion || !testResult[String(selectedQuestion.id)]) {
-  //     return { passed: 0, failed: 0 };
-  //   }
-
-  //   const results = testResult[String(selectedQuestion.id)];
-  //   const passed = Object.values(results).filter((val) => val === true).length;
-  //   const failed = Object.values(results).filter((val) => val === false).length;
-
-  //   return { passed, failed };
-  // };
-
-  const handleSubmit = () => {
-    const { passed, failed } = getTestSummaryForSelectedQuestion();
-    setSummary({ passed, failed });
-    setShowPopup(true);
-  };
+  console.log(selectedQuestion.codeTemplate);
 
   const getTestSummaryForSelectedQuestion = () => {
-    if (
-      !selectedQuestion ||
-      !testResult ||
-      !testResult[String(selectedQuestion.id)] ||
-      !Array.isArray(testResult[String(selectedQuestion.id)].results)
-    ) {
+    if (!selectedQuestion || !testResult[selectedQuestion.id]) {
       return { passed: 0, failed: 0 };
     }
-  
-    const { results } = testResult[String(selectedQuestion.id)];
-  
-    const passed = results.filter((r) => r.passed).length;
-    const failed = results.length - passed;
-  
+
+    const results = testResult[selectedQuestion.id];
+    const passed = Object.values(results).filter((val) => val === true).length;
+    const failed = Object.values(results).filter((val) => val === false).length;
+
     return { passed, failed };
   };
-  
+
+  const handleSubmit = () => {
+    // const { passed, failed } = getTestSummaryForSelectedQuestion();
+    // setSummary({ passed, failed });
+    // setShowPopup(true);
+    const { passed, failed } = getTestSummaryForSelectedQuestion();
+  const totalScore = passed * 5; // 5 marks per passed test case
+
+  setSummary({ passed, failed });
+  setShowPopup(true);
+
+  if (selectedQuestion && selectedQuestion.id) {
+    updateQuestionScore(selectedQuestion.id, totalScore);
+  }
+  };
+
   return (
     <div
       style={{
@@ -137,3 +130,4 @@ const TopPanel = () => {
 };
 
 export default TopPanel;
+

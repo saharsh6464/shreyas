@@ -53,7 +53,7 @@ const SidebarSelectQuestion = () => {
         const questionRef = ref(db, `users/${currentUser.uid}/selectedQuestions/${question.uniqueId}`);
         
         // Save each selected question to the Realtime Database
-        set(questionRef, {
+        set(questionRef,   {
           id: question.id,
           title: question.title,
           difficulty: question.difficulty,
@@ -92,7 +92,7 @@ const SidebarSelectQuestion = () => {
           position: "relative",
         }}
       >
-        <h3 className="text-white text-lg font-bold mb-4">Selected Questions</h3>
+        <h3 className="text-white text-lg font-bold mb-4">Selected  </h3>
 
         {selectedQuestions.length > 0 ? (
           selectedQuestions.map((question) => (
