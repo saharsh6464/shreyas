@@ -18,6 +18,10 @@ export const questionsData = [
       twoArrays:true,
       functionSignature: `int multiplySum(int arr1[], int size1, int arr2[], int size2, int multiplier) {
         // Your code here
+         // int sum = 0;
+         // for (int i = 0; i < size1; ++i) { sum += arr1[i]; }
+             // for (int i = 0; i < size2; ++i) { sum += arr2[i]; }
+            // return sum * multiplier;
     }`,
     functionName: `multiplySum`,
       template: `
@@ -93,70 +97,70 @@ export const questionsData = [
     ]
     
   },
-  {
-    id: 2,
-    Array: true,
-    title: "Array Sum Greater Than Threshold",
-    description: "Given two integer arrays, arr1 and arr2, and an integer threshold, determine if the sum of all elements in arr1 is strictly greater than the given threshold. Return true if it is, and false otherwise.",
-    difficulty: "Easy",
-    avgTime: "8 min",
-    totalarray: 2,
-    totalint: 1,
-    complexity: {
-      time: "O(m+n)",
-      space: "O(1)",
-    },
-    containerClass: "container",
-    codeTemplate: {
-      twoArrays:true,
-      functionSignature: `bool isSumGreaterThanThreshold(int arr1[], int size1, int arr2[], int size2, int threshold) {
-        // Your code here
-      }`,
-      functionName: `isSumGreaterThanThreshold`,
-      
-      template: `
-      #include <iostream>
-      #include <vector>
-      #include <numeric> // For std::accumulate
-      using namespace std;
-
-      {{USER_CODE}}
-
-      int main() {
-          {{TEST_CASES}}
-          return 0;
-      }
-      `,
-      lastparam : "threshold",
-    },
-    testCases: [
-      {
-        example: "Test Case 1",
-        input: { arr1: "[1, 2, 3]", size1: 3, arr2: "[4, 5]", size2: 2, threshold: 5 },
-        output: "true",
-        explanation: "The sum of elements in arr1 is 1+2+3 = 6, which is greater than the threshold 5.",
-      },
-      {
-        example: "Test Case 2",
-        input: { arr1: "[-1, -2]", size1: 2, arr2: "[0]", size2: 1, threshold: -2 },
-        output: "false",
-        explanation: "The sum of elements in arr1 is -1 + (-2) = -3, which is not greater than the threshold -2.",
-      },
-      {
-        example: "Test Case 3",
-        input: { arr1: "[10]", size1: 1, arr2: "[10]", size2: 1, threshold: 10 },
-        output: "false",
-        explanation: "The sum of elements in arr1 is 10, which is not strictly greater than the threshold 10.",
-      },
-    ],
-    tests: [
-      { arr1: [1, 2, 3], size1: 3, arr2: [4, 5], size2: 2, threshold: 5, expected: true },
-      { arr1: [-1, -2], size1: 2, arr2: [0], size2: 1, threshold: -2, expected: false },
-      { arr1: [10], size1: 1, arr2: [10], size2: 1, threshold: 10, expected: false },
-      { arr1: [0, 0, 0], size1: 3, arr2: [1, 1], size2: 2, threshold: -1, expected: true },
-      { arr1: [-5, 2, -1], size1: 3, arr2: [3], size2: 1, threshold: -4, expected: false },
-    ],
+ {
+  "id": 2,
+  "Array": true,
+  "title": "Array Sum Greater Than Threshold",
+  "description": "Given two integer arrays, arr1 and arr2, and an integer threshold, determine if the sum of all elements in arr1 is strictly greater than the given threshold. Return true if it is, and false otherwise.",
+  "difficulty": "Easy",
+  "avgTime": "8 min",
+  "totalarray": 2,
+  "totalint": 1,
+  "complexity": {
+    "time": "O(m+n)",
+    "space": "O(1)"
   },
+  "containerClass": "container",
+  "codeTemplate": {
+    "twoArrays": true,
+    "functionSignature": "bool isSumGreaterThanThreshold(int arr1[], int size1, int arr2[], int size2, int threshold) {\n    // Your code here\n}",
+    "functionName": "isSumGreaterThanThreshold",
+    "template": "#include <iostream>\n#include <vector>\n#include <numeric> // For std::accumulate\nusing namespace std;\n\n{{USER_CODE}}\n\nint main() {\n    {{TEST_CASES}}\n    return 0;\n}",
+    "lastparam": "threshold"
+  },
+  "testCases": [
+    {
+      "example": "Test Case 1",
+      "input": { "arr1": "[1, 2, 3]", "size1": 3, "arr2": "[4, 5]", "size2": 2, "threshold": 5 },
+      "output": "true",
+      "explanation": "The sum of elements in arr1 is 1+2+3 = 6, which is greater than the threshold 5."
+    },
+    {
+      "example": "Test Case 2",
+      "input": { "arr1": "[-1, -2]", "size1": 2, "arr2": "[0]", "size2": 1, "threshold": -2 },
+      "output": "false",
+      "explanation": "The sum of elements in arr1 is -1 + (-2) = -3, which is not greater than the threshold -2."
+    },
+    {
+      "example": "Test Case 3",
+      "input": { "arr1": "[10]", "size1": 1, "arr2": "[10]", "size2": 1, "threshold": 10 },
+      "output": "false",
+      "explanation": "The sum of elements in arr1 is 10, which is not strictly greater than the threshold 10."
+    }
+  ],
+  "tests": [
+    { "arr1": [1, 2, 3], "size1": 3, "arr2": [4, 5], "size2": 2, "threshold": 5, "expected": true },
+    { "arr1": [-1, -2], "size1": 2, "arr2": [0], "size2": 1, "threshold": -2, "expected": false },
+    { "arr1": [10], "size1": 1, "arr2": [10], "size2": 1, "threshold": 10, "expected": false },
+    { "arr1": [0, 0, 0], "size1": 3, "arr2": [1, 1], "size2": 2, "threshold": -1, "expected": true },
+    { "arr1": [-5, 2, -1], "size1": 3, "arr2": [3], "size2": 1, "threshold": -4, "expected": false },
+    { "arr1": [], "size1": 0, "arr2": [], "size2": 0, "threshold": 0, "expected": false },
+    { "arr1": [1, 1, 1], "size1": 3, "arr2": [1, 1], "size2": 2, "threshold": 4, "expected": true },
+    { "arr1": [100], "size1": 1, "arr2": [], "size2": 0, "threshold": 99, "expected": true },
+    { "arr1": [1, 2, 3], "size1": 3, "arr2": [-1, -2], "size2": 2, "threshold": 2, "expected": true },
+    { "arr1": [0], "size1": 1, "arr2": [0], "size2": 1, "threshold": 0, "expected": false },
+    { "arr1": [-10, -10], "size1": 2, "arr2": [-10], "size2": 1, "threshold": -25, "expected": true },
+    { "arr1": [1, 2, 3], "size1": 3, "arr2": [4], "size2": 1, "threshold": 10, "expected": false },
+    { "arr1": [1], "size1": 1, "arr2": [2], "size2": 1, "threshold": 2, "expected": true },
+    { "arr1": [1, 1, 1, 1, 1], "size1": 5, "arr2": [1, 1, 1], "size2": 3, "threshold": 7, "expected": true },
+    { "arr1": [3, 3, 3], "size1": 3, "arr2": [1], "size2": 1, "threshold": 10, "expected": false },
+    { "arr1": [-1, -2, -3], "size1": 3, "arr2": [-4], "size2": 1, "threshold": -11, "expected": true },
+    { "arr1": [0], "size1": 1, "arr2": [0, 0, 0, 0], "size2": 4, "threshold": 0, "expected": false },
+    { "arr1": [10, -5, -5], "size1": 3, "arr2": [], "size2": 0, "threshold": -1, "expected": true },
+    { "arr1": [2, 4, 6], "size1": 3, "arr2": [8], "size2": 1, "threshold": 19, "expected": false },
+    { "arr1": [5], "size1": 1, "arr2": [5], "size2": 1, "threshold": 9, "expected": true }
+  ]
+},
   {
     "id": 3,
     "Array": true,
@@ -198,13 +202,38 @@ export const questionsData = [
         "explanation": "Both sums are 10. Difference is 0. 0 * 10 = 0."
       }
     ],
-    "tests": [
-      { "arr1": [1, 5], "size1": 2, "arr2": [2, 3], "size2": 2, "multiplier": 3, "expected": 3 },
-      { "arr1": [-1, -2], "size1": 2, "arr2": [4, 5], "size2": 2, "multiplier": 2, "expected": 24 },
-      { "arr1": [10], "size1": 1, "arr2": [10], "size2": 1, "multiplier": 10, "expected": 0 },
-      { "arr1": [0, 5], "size1": 2, "arr2": [-3, 0], "size2": 2, "multiplier": 5, "expected": 40 },
-      { "arr1": [-10, 2], "size1": 2, "arr2": [5, -1], "size2": 2, "multiplier": 1, "expected": 8 }
-    ]
+  "tests": [
+    { "arr1": [1, 5], "size1": 2, "arr2": [2, 3], "size2": 2, "multiplier": 3, "expected": 3 },
+    { "arr1": [-1, -2], "size1": 2, "arr2": [4, 5], "size2": 2, "multiplier": 2, "expected": 24 },
+    { "arr1": [10], "size1": 1, "arr2": [10], "size2": 1, "multiplier": 10, "expected": 0 },
+    { "arr1": [0, 5], "size1": 2, "arr2": [-3, 0], "size2": 2, "multiplier": 5, "expected": 40 },
+    { "arr1": [-10, 2], "size1": 2, "arr2": [5, -1], "size2": 2, "multiplier": 1, "expected": 8 },
+    { "arr1": [3, 7], "size1": 2, "arr2": [4, 9], "size2": 2, "multiplier": 2, "expected": 34 },
+    { "arr1": [1, 1, 1], "size1": 3, "arr2": [2, 2], "size2": 2, "multiplier": 3, "expected": 18 },
+    { "arr1": [5, 10], "size1": 2, "arr2": [3, 6], "size2": 2, "multiplier": 1, "expected": 34 },
+    { "arr1": [-3, 6], "size1": 2, "arr2": [-2, 5], "size2": 2, "multiplier": 4, "expected": 16 },
+    { "arr1": [7], "size1": 1, "arr2": [8], "size2": 1, "multiplier": 3, "expected": 45 },
+    { "arr1": [0, 0], "size1": 2, "arr2": [0, 0], "size2": 2, "multiplier": 10, "expected": 0 },
+    { "arr1": [1, 5, 7], "size1": 3, "arr2": [2, 4], "size2": 2, "multiplier": 5, "expected": 55 },
+    { "arr1": [-5, -5], "size1": 2, "arr2": [-10, 10], "size2": 2, "multiplier": 2, "expected": -20 },
+    { "arr1": [5, 10, 15], "size1": 3, "arr2": [20], "size2": 1, "multiplier": 2, "expected": 70 },
+    { "arr1": [1, 3, 4], "size1": 3, "arr2": [2, 6], "size2": 2, "multiplier": 0, "expected": 0 },
+    { "arr1": [8], "size1": 1, "arr2": [5], "size2": 1, "multiplier": 3, "expected": 39 },
+    { "arr1": [1, 2], "size1": 2, "arr2": [3, 4], "size2": 2, "multiplier": 4, "expected": 40 },
+    { "arr1": [1], "size1": 1, "arr2": [2], "size2": 1, "multiplier": 10, "expected": 30 },
+    { "arr1": [-5, 3], "size1": 2, "arr2": [2, -4], "size2": 2, "multiplier": 2, "expected": -4 },
+    { "arr1": [4, 5], "size1": 2, "arr2": [6, 7], "size2": 2, "multiplier": 5, "expected": 65 },
+    { "arr1": [2, 4, 6], "size1": 3, "arr2": [8], "size2": 1, "multiplier": 3, "expected": 72 },
+    { "arr1": [1, 2, 3, 4], "size1": 4, "arr2": [5], "size2": 1, "multiplier": 2, "expected": 40 },
+    { "arr1": [7, 8, 9], "size1": 3, "arr2": [10, 11], "size2": 2, "multiplier": 3, "expected": 93 },
+    { "arr1": [-1, -1, -1], "size1": 3, "arr2": [-1, -1], "size2": 2, "multiplier": 4, "expected": -12 },
+    { "arr1": [5, 5], "size1": 2, "arr2": [5, 5], "size2": 2, "multiplier": 5, "expected": 75 },
+    { "arr1": [10], "size1": 1, "arr2": [20], "size2": 1, "multiplier": 2, "expected": 60 },
+    { "arr1": [-5, 5], "size1": 2, "arr2": [10, -10], "size2": 2, "multiplier": 3, "expected": 0 },
+    { "arr1": [3, 2, 1], "size1": 3, "arr2": [1, 2, 3], "size2": 3, "multiplier": 1, "expected": 18 },
+    { "arr1": [6, 5, 7], "size1": 3, "arr2": [8], "size2": 1, "multiplier": 2, "expected": 46 },
+    { "arr1": [4, 8, 2], "size1": 3, "arr2": [10, 5], "size2": 2, "multiplier": 3, "expected": 90 }
+  ],
   },
   {
     "id": 4,
@@ -247,13 +276,43 @@ export const questionsData = [
         "explanation": "Even-indexed: arr1 → -1 + (-3) = -4, arr2 → 5. Total = 1. 1 * 1 = 1."
       }
     ],
-    "tests": [
-      { "arr1": [1, 2, 3], "size1": 3, "arr2": [4, 5, 6], "size2": 3, "multiplier": 2, "expected": 28 },
-      { "arr1": [10, 20], "size1": 2, "arr2": [30], "size2": 1, "multiplier": 5, "expected": 200 },
-      { "arr1": [-1, 2, -3, 4], "size1": 4, "arr2": [5, -6], "size2": 2, "multiplier": 1, "expected": 1 },
-      { "arr1": [0, 1, 0, 1], "size1": 4, "arr2": [2, 3, 2], "size2": 3, "multiplier": 10, "expected": 40 },
-      { "arr1": [5], "size1": 1, "arr2": [-2, 4, -6], "size2": 3, "multiplier": 3, "expected": -3 }
-    ]
+   "tests": [
+    { "arr1": [1, 2, 3], "size1": 3, "arr2": [4, 5, 6], "size2": 3, "multiplier": 2, "expected": 28 },
+    { "arr1": [10, 20], "size1": 2, "arr2": [30], "size2": 1, "multiplier": 5, "expected": 200 },
+    { "arr1": [-1, 2, -3, 4], "size1": 4, "arr2": [5, -6], "size2": 2, "multiplier": 1, "expected": 1 },
+    { "arr1": [0, 1, 0, 1], "size1": 4, "arr2": [2, 3, 2], "size2": 3, "multiplier": 10, "expected": 40 },
+    { "arr1": [5], "size1": 1, "arr2": [-2, 4, -6], "size2": 3, "multiplier": 3, "expected": -3 },
+
+    { "arr1": [1, 3, 5], "size1": 3, "arr2": [7, 9, 11], "size2": 3, "multiplier": 2, "expected": 18 },
+    { "arr1": [-1, -2, -3], "size1": 3, "arr2": [4, 5, 6], "size2": 3, "multiplier": 3, "expected": -18 },
+    { "arr1": [0, 5, 0], "size1": 3, "arr2": [0, 3, 7], "size2": 3, "multiplier": 4, "expected": 0 },
+    { "arr1": [2, 4, 6, 8], "size1": 4, "arr2": [1, 3, 5, 7], "size2": 4, "multiplier": 1, "expected": 16 },
+    { "arr1": [-1, -1, -1, -1], "size1": 4, "arr2": [-1, -1, -1, -1], "size2": 4, "multiplier": 1, "expected": -4 },
+
+    { "arr1": [1, 2, 3, 4], "size1": 4, "arr2": [1, 2, 3, 4], "size2": 4, "multiplier": 2, "expected": 12 },
+    { "arr1": [0, 0, 0, 0], "size1": 4, "arr2": [1, 2, 3, 4], "size2": 4, "multiplier": 5, "expected": 0 },
+    { "arr1": [1, 3, 5, 7], "size1": 4, "arr2": [2, 4, 6, 8], "size2": 4, "multiplier": 2, "expected": 16 },
+    { "arr1": [-5, 2, 8, -1], "size1": 4, "arr2": [3, -4, 6, 7], "size2": 4, "multiplier": 1, "expected": 10 },
+    { "arr1": [0, 3, 0], "size1": 3, "arr2": [4, 5, 6], "size2": 3, "multiplier": 3, "expected": 12 },
+
+    { "arr1": [2, 3, 4, 5, 6], "size1": 5, "arr2": [7, 8, 9, 10, 11], "size2": 5, "multiplier": 2, "expected": 28 },
+    { "arr1": [2, 2, 2], "size1": 3, "arr2": [2, 2, 2], "size2": 3, "multiplier": 4, "expected": 16 },
+    { "arr1": [7, 3, 9, 5], "size1": 4, "arr2": [4, 2, 1, 8], "size2": 4, "multiplier": 3, "expected": 69 },
+    { "arr1": [1, 1, 1, 1], "size1": 4, "arr2": [1, 1, 1, 1], "size2": 4, "multiplier": 2, "expected": 4 },
+    { "arr1": [10, 20, 30], "size1": 3, "arr2": [5, 5, 5], "size2": 3, "multiplier": 1, "expected": 60 },
+
+    { "arr1": [-1, 1, -1], "size1": 3, "arr2": [0, 0, 0], "size2": 3, "multiplier": 3, "expected": 0 },
+    { "arr1": [0, 0, 0, 0, 0], "size1": 5, "arr2": [2, 4, 6, 8, 10], "size2": 5, "multiplier": 3, "expected": 0 },
+    { "arr1": [5, 4, 3, 2, 1], "size1": 5, "arr2": [1, 2, 3, 4, 5], "size2": 5, "multiplier": 2, "expected": 30 },
+    { "arr1": [6, 7, 8, 9, 10], "size1": 5, "arr2": [5, 4, 3, 2, 1], "size2": 5, "multiplier": 1, "expected": 30 },
+    { "arr1": [-1, 2, -3, 4, -5], "size1": 5, "arr2": [6, 7, 8, 9, 10], "size2": 5, "multiplier": 4, "expected": 48 },
+
+    { "arr1": [1, 1, 1, 1], "size1": 4, "arr2": [2, 2, 2, 2], "size2": 4, "multiplier": 5, "expected": 20 },
+    { "arr1": [10, 0, -10, 20, -20], "size1": 5, "arr2": [1, 2, 3, 4, 5], "size2": 5, "multiplier": 3, "expected": 0 },
+    { "arr1": [2, 4, 6, 8, 10], "size1": 5, "arr2": [1, 3, 5, 7, 9], "size2": 5, "multiplier": 2, "expected": 48 },
+    { "arr1": [3, 6, 9], "size1": 3, "arr2": [3, 6, 9], "size2": 3, "multiplier": 1, "expected": 18 },
+    { "arr1": [7, 8, 9, 10, 11], "size1": 5, "arr2": [1, 2, 3, 4, 5], "size2": 5, "multiplier": 3, "expected": 75 }
+  ],
   },
   
   {
@@ -317,66 +376,80 @@ export const questionsData = [
       { arr: [2, 2, 2], size: 3, expected: 4 }
     ]
   },
-  {
-    id: 6,
-    Array: true,
-    title: "Count Even and Odd Numbers",
-    description:
-      "Given an array of integers and its size, return the count of even and odd numbers. This task tests your ability to traverse arrays and use modulo logic.",
-    difficulty: "Easy",
-    avgTime: "6 min",
-    complexity: {
-      time: "O(n)",
-      space: "O(1)",
-    },
-    containerClass: "container",
-    codeTemplate: {
-      functionSignature: `void countEvenOdd(int arr[], int size, int &evenCount, int &oddCount) {
-      // Your code here
-  }`,
-      template: `
-  #include <iostream>
-  using namespace std;
-  
-  {{USER_CODE}}
-  
-  int main() {
-      int arr[] = {1, 2, 3, 4, 5, 6};
-      int size = sizeof(arr) / sizeof(arr[0]);
-      int even = 0, odd = 0;
-      countEvenOdd(arr, size, even, odd);
-      cout << "Even: " << even << ", Odd: " << odd << endl;
-      return 0;
-  }
-      `,
-    },
-    testCases: [
-      {
-        example: "Test Case 1",
-        input: { arr: "[1, 2, 3, 4, 5, 6]", size: 6 },
-        output: "[3, 3]",
-        explanation: "Even: 2,4,6; Odd: 1,3,5"
-      },
-      {
-        example: "Test Case 2",
-        input: { arr: "[2, 4, 6]", size: 3 },
-        output: "[3, 0]",
-        explanation: "All are even."
-      },
-      {
-        example: "Test Case 3",
-        input: { arr: "[1, 3, 5]", size: 3 },
-        output: "[0, 3]",
-        explanation: "All are odd."
-      }
-    ],
-    tests: [
-      { arr: [1, 2, 3, 4, 5, 6], size: 6, expected: [3, 3] },
-      { arr: [2, 4, 6], size: 3, expected: [3, 0] },
-      { arr: [1, 3, 5], size: 3, expected: [0, 3] },
-      { arr: [], size: 0, expected: [0, 0] }
-    ]
+{
+  id: 6,
+  Array: true,
+  title: "Linear Search in Array",
+  description:
+    "Given an array of integers and a target integer, perform a linear search to determine if the target exists in the array. If found, return its index (0-based). If not found, return -1. This problem tests your understanding of basic array traversal and conditional checks.",
+  difficulty: "Easy",
+  avgTime: "8 min",
+  totalarray: 1,
+  totalint: 1,
+  complexity: {
+    time: "O(n)",
+    space: "O(1)",
   },
+  containerClass: "container",
+  codeTemplate: {
+          oneArray:true,
+    twoArrays: false,
+    functionSignature: `int linearSearch(int arr[], int size, int target) {
+        // Your code here
+    }`,
+    functionName: `linearSearch`,
+    template: `
+#include <iostream>
+using namespace std;
+
+{{USER_CODE}}
+
+int main() {
+     {{TEST_CASES}}
+    return 0;
+}
+`,
+    lastparam: "target",
+  },
+  testCases: [
+    {
+      example:  "Test Case 1",
+      input: { arr: "[1, 2, 3, 4, 5]", size: 5, target: 3 },
+      output: 2,
+      explanation: "The element 3 is found at index 2.",
+    },
+    {
+      example: "Test Case 2",
+      input: { arr: "[10, 20, 30, 40]", size: 4, target: 25 },
+      output: -1,
+      explanation: "The element 25 is not present in the array.",
+    },
+    {
+      example: "Test Case 3",
+      input: { arr: "[5]", size: 1, target: 5 },
+      output: 0,
+      explanation: "The element 5 is the only element and is at index 0.",
+    },
+    {
+      example:  "Test Case 5",
+      input: { arr: "[7, 8, 9, 10]", size: 4, target: 10 },
+      output: 3,
+      explanation: "The element 10 is at the last index (3).",
+    }
+  ],
+  tests: [
+    { arr: [1, 2, 3, 4, 5], size: 5, target: 3, expected: 2 },
+    { arr: [10, 20, 30, 40], size: 4, target: 25, expected: -1 },
+    { arr: [5], size: 1, target: 5, expected: 0 },
+    { arr: [7, 8, 9, 10], size: 4, target: 10, expected: 3 },
+    { arr: [0, 1, 2, 3], size: 4, target: 0, expected: 0 },
+    { arr: [100, 200, 300, 400], size: 4, target: 500, expected: -1 },
+    { arr: [], size: 0, target: 10, expected: -1 },
+    { arr: [1, 1, 1, 1], size: 4, target: 1, expected: 0 },
+    { arr: [2, 4, 6, 8], size: 4, target: 6, expected: 2 },
+    { arr: [99, 98, 97, 96], size: 4, target: 95, expected: -1 }
+  ]
+},
   {
     id: 7,
     Array: true,
