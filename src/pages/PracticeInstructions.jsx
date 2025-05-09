@@ -33,7 +33,7 @@ export default function PracticeInstructions({ toggleSidebar }) {
         // If the exam code exists, store the questions and redirect to FetchData page
         const questions = snapshot.val();
         setTestStarted(true);
-        navigate("/fetch-data", { state: { questions } }); // Pass questions to FetchData page
+        navigate("/webcam-capture", { state: { questions } }); // Pass questions to FetchData page
       } else {
         alert("Invalid Exam Code. Please try again.");
       }

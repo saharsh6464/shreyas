@@ -6,10 +6,14 @@ const CompanyDashboard = () => {
 
   // Dummy data for students
   const studentData = [
-    { id: 1, riskRatio: 'High', totalScore: 85, totalQuestions: 20 },
-    { id: 2, riskRatio: 'Low', totalScore: 90, totalQuestions: 25 },
-    { id: 3, riskRatio: 'Medium', totalScore: 75, totalQuestions: 18 },
+    { id: 1, riskRatio: 0.2, totalScore: 85, totalQuestions: 100 },
+    { id: 2, riskRatio: 0.5, totalScore: 70, totalQuestions: 100 },
+    { id: 3, riskRatio: 0.8, totalScore: 50, totalQuestions: 100 },
+    { id: 4, riskRatio: 0.1, totalScore: 90, totalQuestions: 100 },
+    { id: 5, riskRatio: 0.6, totalScore: 65, totalQuestions: 100 },
+    // Add more student data as needed
   ];
+  
 
   return (
     <div className="bg-darkBg p-10 min-h-screen">
