@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, GithubAuthProvider, signInWithPopup } from "firebase/auth";
-import { app } from "../firebaseConfig";
+import { app } from "../firebaseConfig"; // Assuming firebaseConfig exports the Firebase app instance
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../AuthContext"; 
+import { useAuth } from "../AuthContext"; // Import useAuth hook
 
 const SignupPage = () => {
   const auth = getAuth(app);
@@ -16,22 +16,31 @@ const SignupPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(""); // State for displaying errors
   const [waveData, setWaveData] = useState([]);
-  const { currentUser, setCurrentUser } = useAuth();
+  // Destructure currentUser and userType from useAuth.
+  // AuthContext handles setting currentUser internally via onAuthStateChanged.
+  const { currentUser, userType } = useAuth();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  // Track window resize
+
+  // Track window resize for responsive waves
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Redirect if user is already logged in
   useEffect(() => {
     if (currentUser) {
-      navigate("/company-dashboard"); // Redirect if already logged in
+      // Redirect based on userType from AuthContext
+      if (userType === 'company') {
+        navigate("/company-dashboard", { replace: true });
+      } else {
+        navigate("/dashboard", { replace: true });
+      }
     }
-  }, [currentUser, navigate]);
+  }, [currentUser, userType, navigate]); // Added userType to dependency array
 
   // Initialize wave parameters
   useEffect(() => {
@@ -58,16 +67,70 @@ const SignupPage = () => {
     return () => clearInterval(intervalId);
   }, []);
 
+  // Function to set custom claim for company user
+  // This typically requires a Firebase Cloud Function or a backend API
+  const setCompanyUserClaim = async (user) => {
+    if (!user) return;
+    try {
+      // --- IMPORTANT: You MUST implement this backend call ---
+      // This is where you would call your Firebase Cloud Function (or other backend API)
+      // to set the custom claim 'isCompanyUser: true' for the user with 'user.uid'.
+      // Example using a hypothetical Cloud Function:
+      // const response = await fetch('/api/setCompanyUserClaim', { // Replace with your actual endpoint
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Authorization': `Bearer ${await user.getIdToken()}` // Send user's ID token for authentication
+      //   },
+      //   body: JSON.stringify({ uid: user.uid })
+      // });
+      // const data = await response.json();
+      // if (!response.ok) {
+      //   throw new Error(data.message || 'Failed to set company claim on backend');
+      // }
+      // console.log("Company claim set successfully on backend:", data.message);
+
+      // --- TEMPORARY LOCAL DEBUGGING HACK (REMOVE IN PRODUCTION) ---
+      // This is ONLY for local testing to simulate the userType being set.
+      // In a real app, the AuthContext's onAuthStateChanged listener would pick up
+      // the actual Firebase Custom Claim after the backend sets it.
+      localStorage.setItem('userTypeDebug', 'company');
+      console.log("DEBUG: userTypeDebug set to 'company' in localStorage.");
+      // --- END TEMPORARY HACK ---
+
+      // After the backend sets the claim, force a token refresh so AuthContext picks it up.
+      // This is crucial for the AuthContext's onAuthStateChanged listener to get the updated claims.
+      await user.getIdToken(true);
+      console.log("Firebase ID token refreshed to pick up new claims.");
+
+    } catch (error) {
+      console.error("Error setting company user claim:", error);
+      setError("Failed to finalize company account setup. Please try again or contact support.");
+    }
+  };
+
   // Email/password signup
   const handleSignup = async () => {
-    if (!email || !password) return setError("Please fill in all fields.");
+    if (!email || !password) {
+      setError("Please fill in all fields.");
+      return;
+    }
     setLoading(true);
+    setError(""); // Clear previous errors
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      setCurrentUser(userCredential.user); // ✅ Update context
-      navigate("/company-dashboard");
-    } catch (error) {
-      setError(error.message);
+      // User created in Firebase Authentication
+      const user = userCredential.user;
+
+      // Set the custom claim for this user to be a company user
+      await setCompanyUserClaim(user);
+
+      // Navigate immediately. The AuthContext's useEffect will then confirm the userType
+      // and ProtectedRoute will handle the final redirection if needed.
+      navigate("/company-dashboard", { replace: true });
+    } catch (err) {
+      setError(err.message);
+      console.error("Email/Password Signup Error:", err);
     } finally {
       setLoading(false);
     }
@@ -76,12 +139,18 @@ const SignupPage = () => {
   // Google signup
   const handleGoogleSignup = async () => {
     setLoading(true);
+    setError(""); // Clear previous errors
     try {
       const userCredential = await signInWithPopup(auth, googleProvider);
-      setCurrentUser(userCredential.user);
-      navigate("/company-dashboard");
-    } catch (error) {
-      setError("Google signup failed.");
+      const user = userCredential.user;
+
+      // Set the custom claim for this user to be a company user
+      await setCompanyUserClaim(user);
+
+      navigate("/company-dashboard", { replace: true });
+    } catch (err) {
+      setError(err.message); // Use err.message for more specific Firebase errors
+      console.error("Google Signup Error:", err);
     } finally {
       setLoading(false);
     }
@@ -90,12 +159,19 @@ const SignupPage = () => {
   // GitHub signup
   const handleGithubSignup = async () => {
     setLoading(true);
+    setError(""); // Clear previous errors
     try {
       const userCredential = await signInWithPopup(auth, githubProvider);
-      setCurrentUser(userCredential.user);
-      navigate("/dashboard");
-    } catch (error) {
-      setError("GitHub signup failed.");
+      const user = userCredential.user;
+
+      // Set the custom claim for this user to be a company user
+      await setCompanyUserClaim(user);
+
+      // All sign-ups on this page should lead to company dashboard
+      navigate("/company-dashboard", { replace: true });
+    } catch (err) {
+      setError(err.message); // Use err.message for more specific Firebase errors
+      console.error("GitHub Signup Error:", err);
     } finally {
       setLoading(false);
     }
@@ -166,15 +242,17 @@ const SignupPage = () => {
           <button
             onClick={handleGoogleSignup}
             className="flex items-center justify-center gap-2 bg-gray-700 w-full py-2 rounded-md mb-3 hover:bg-gray-600 transition"
+            disabled={loading}
           >
-            <FcGoogle /> Sign up with Google
+            <FcGoogle /> {loading ? "Signing up..." : "Sign up with Google"}
           </button>
 
           <button
             onClick={handleGithubSignup}
             className="flex items-center justify-center gap-2 bg-gray-700 w-full py-2 rounded-md mb-4 hover:bg-gray-600 transition"
+            disabled={loading}
           >
-            <FaGithub /> Sign up with GitHub
+            <FaGithub /> {loading ? "Signing up..." : "Sign up with GitHub"}
           </button>
 
           <div className="flex flex-col gap-3">
@@ -184,6 +262,7 @@ const SignupPage = () => {
               value={email}
               onChange={e => setEmail(e.target.value)}
               className="bg-gray-700 text-white p-2 rounded-md border border-gray-600 focus:outline-none"
+              disabled={loading}
             />
             <input
               type="password"
@@ -191,18 +270,23 @@ const SignupPage = () => {
               value={password}
               onChange={e => setPassword(e.target.value)}
               className="bg-gray-700 text-white p-2 rounded-md border border-gray-600 focus:outline-none"
+              disabled={loading}
             />
+
+            {error && <p className="text-red-500 text-center text-sm mt-2">{error}</p>}
 
             <button
               onClick={handleSignup}
-              className="bg-purple-600 hover:bg-purple-700 transition text-white py-2 rounded-md"
+              className="bg-purple-600 hover:bg-purple-700 transition text-white py-2 rounded-md mt-2"
+              disabled={loading}
             >
-              Create Account
+              {loading ? "Creating Account..." : "Create Account"}
             </button>
 
             <button
               onClick={() => navigate("/login")}
               className="bg-gray-600 hover:bg-gray-500 text-white py-2 rounded-md transition"
+              disabled={loading}
             >
               Already have an account? Login
             </button>
